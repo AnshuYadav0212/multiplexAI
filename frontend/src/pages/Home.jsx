@@ -3,12 +3,17 @@ import { auth, googleProvider } from '../../utils/firebase';
 import React from 'react'
 import api from '../../utils/axios';
 import {FcGoogle} from "react-icons/fc"
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserData } from '../redux/userSlice';
 
 function Home() {
-
+   const {userData} =useSelector(state=>state.user)
+   const dispatch =useDispatch();
+   console.log(userData)
     const handleSignIn = async (token) => {
         try {
           const {data}=await api.post("/api/auth/login",{token})
+          dispatch(setUserData(data))
           console.log(data)
         }
         catch(error){
@@ -25,6 +30,7 @@ function Home() {
 
     return (   
         <div className='h-screen flex bg-black text-white overflow-hidden'>
+            {!userData && 
             
             <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
                <div className='w-[340px] p-7 bg-[#13152c] border border-white/[0.1] rounded-2xl flex flex-col gap-4'>
@@ -47,6 +53,7 @@ function Home() {
                 </div>
 
             </div>
+}
             
         </div>
     )

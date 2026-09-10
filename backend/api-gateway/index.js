@@ -20,7 +20,7 @@ app.use(
 
 app.use(cookieParser());
 app.use("/api/auth", proxy(process.env.AUTHENTICATION_SERVICE_URL));
-app.get("/api/info", protect, getCurrentUser);
+app.get("/api/self", protect, getCurrentUser);
 app.get("/", (req, res) => {
   res.json({ message: "Hello from API Gateway" });
 });
