@@ -18,6 +18,10 @@ import {
     addConversation,
 } from "../redux/conversationSlice";
 import { createConversation } from "../features/createConversation";
+import logOut from "../features/logout.js";
+import { setUserData } from "../redux/userSlice";
+import { signOut } from "firebase/auth";
+import { auth } from "../../utils/firebase.js";
 
 function SideBar() {
     const [collapse, setCollapse] = useState(false);
@@ -35,11 +39,22 @@ function SideBar() {
             dispatch(setConversations(data));
         };
         getConver();
-    }, []);
+    }, [userData?._id]);
 
     const handleCreateConversation = async () => {
         const data = await createConversation();
         dispatch(addConversation(data));
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logOut();
+            await signOut(auth);
+            dispatch(setUserData(null));
+
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
 
     return (
@@ -150,13 +165,16 @@ function SideBar() {
                                     <Coins size={17} />
                                 </button>
                                 <button className=" flex items-center justify-center w-7 h-7 rounded-[7px] hover:text-slate-400 hover:bg-white/8 
-            transition-all duration-150 bg-transparent border-none text-yellow-500 cursor-pointer">
+            transition-all duration-150 bg-transparent border-none text-yellow-500 cursor-pointer"
+                                    onClick={handleLogout}>
                                     <LogOut size={17} />
                                 </button>
                             </div>
                         </div>
                     ) : (
-                        <button>login</button>
+                        <button className="w-full flex items-center justify-center w-7 h-7 rounded-[7px] hover:text-slate-400 hover:bg-white/8 
+            transition-all duration-150 bg-transparent border-none text-yellow-500 cursor-pointer"
+                        >login</button>
                     )}
                 </div>
             </div>

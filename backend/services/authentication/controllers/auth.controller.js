@@ -4,6 +4,7 @@ import User from "../models/user.model.js";
 import crypto from "crypto";
 import { createConnection } from "mongoose";
 import redis from "../../../shared/redis/redis.js";
+import cookieParser from "cookie-parser";
 export const login = async (req, res) => {
   try {
     const { token } = req.body;
@@ -51,6 +52,7 @@ export const logout = async (req, res) => {
     res.clearCookie("session");
     return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
+    console.log(`unable to logout error: ${error}  this ...`);
     return res.status(500).json({ message: `Unable to logout ${error}` });
   }
 };
