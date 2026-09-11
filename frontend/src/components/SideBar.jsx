@@ -5,6 +5,7 @@ import {
     LogOut,
     MessageSquare,
     PanelLeftIcon,
+    PanelRight,
     PenBoxIcon,
     PenSquare,
     Plus,
@@ -26,7 +27,8 @@ import { auth } from "../../utils/firebase.js";
 function SideBar() {
     const [collapse, setCollapse] = useState(false);
     const dispatch = useDispatch();
-    const { imageError, setImageError } = useState(false);
+    const [imageError, setImageError] = useState(false);
+
     const { conversation, selectedConversation } = useSelector(
         (state) => state.conversation,
     );
@@ -56,6 +58,63 @@ function SideBar() {
             console.error("Logout failed:", error);
         }
     };
+
+    if (collapse) {
+        return (
+            <div className=" hidden lg:flex flex-col items-center w-[56px] h-screen bg-[#212a3f] border-r border-white/6 py-4 gap-1 shrink-0">
+                <button className="flex items-center justify-center w-7 h-7 rounded-lg hover:text-slate-200 hover:bg-purple/5 
+            transition-colors duration-150 text-slate-500 bg-transparent border-none cursor-pointer mb-1" onClick={() =>
+                        setCollapse(false)
+                    }>
+                    <PanelRight />
+                </button>
+                <button className="flex items-center justify-center w-7 h-7 rounded-lg hover:text-slate-200 hover:bg-purple/5 
+            transition-colors duration-150 text-slate-500 bg-transparent border-none cursor-pointer">
+                    <Plus size={18} />
+                </button>
+
+                <div className="flex-1 overflow-y-auto px-2 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-18">
+                    {conversations.map((conver, i) => {
+                        const isActiveConver = selectedConversation?._id == conver?._id;
+                        return (
+                            <div
+                                key={conver._id}
+                                onClick={() => dispatch(setSelectedConversation(conver))}
+                                className={`flex items-center gap-2 cursor-pointer mb-0.5 px-3 py-2.5 rounded-[10px] border transition-colors duration-150
+                                    ${isActiveConver ? "bg-indigo-500/10 border-indigo-500/18" : "bg-transparent border-transparent"}`}
+                            >
+                                <div
+                                    className={`flex item-center justify-center shrink-0 w-5 h-5 rounded-lg transition-colors duration-150
+                                    ${isActiveConver ? "bg-indigo-400/10 text-indigo-400" : "bg-transparent text-slate-500"}
+                                    `}
+                                >
+                                    <MessageSquare size={15} />
+                                </div>
+
+                            </div>
+                        );
+                    })}
+                </div>
+                <div className="relative shrink-0">
+                    {userData?.avatar && !imageError ? (
+                        <img
+                            className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25"
+                            src={userData?.avatar}
+                            alt={"image"}
+                            onError={() => setImageError(true)}
+                        />
+                    ) : (
+                        <div className=" w-9 h-9 rounded-[10px] bg-white/6 flex items-center justify-center">
+                            <User size={15} className="text-slate-400" />
+                        </div>
+                    )}
+                </div>
+
+
+
+            </div>
+        )
+    }
 
     return (
         <div className="fixed lg:static inset-y-0 left-0 z-45 w-62.5 h-screen shrink-0 bg-[#42426096] border-r border-white/6">
@@ -140,7 +199,7 @@ function SideBar() {
           hover:bg-white/5 transition-colors duration-150 "
                         >
                             <div className="relative shrink-0">
-                                {userData?.avatar || !imageError ? (
+                                {userData?.avatar && !imageError ? (
                                     <img
                                         className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25"
                                         src={userData?.avatar}
@@ -148,8 +207,8 @@ function SideBar() {
                                         onError={() => setImageError(true)}
                                     />
                                 ) : (
-                                    <div className="">
-                                        <User />
+                                    <div className=" w-9 h-9 rounded-[10px] bg-white/6 flex items-center justify-center">
+                                        <User size={15} className="text-slate-400" />
                                     </div>
                                 )}
                             </div>
@@ -180,6 +239,7 @@ function SideBar() {
             </div>
         </div>
     );
+
 }
 
 export default SideBar;
