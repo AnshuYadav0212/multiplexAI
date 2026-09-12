@@ -69,7 +69,9 @@ function SideBar() {
                     <PanelRight />
                 </button>
                 <button className="flex items-center justify-center w-7 h-7 rounded-lg hover:text-slate-200 hover:bg-purple/5 
-            transition-colors duration-150 text-slate-500 bg-transparent border-none cursor-pointer">
+            transition-colors duration-150 text-slate-500 bg-transparent border-none cursor-pointer
+            "  onClick={() => dispatch(setSelectedConversation(null))}
+                >
                     <Plus size={18} />
                 </button>
 
@@ -136,7 +138,7 @@ function SideBar() {
                     <button
                         className=" flex items-center justify-center w-7 h-7 rounded-lg hover:text-slate-200 hover:bg-purple/5 
             transition-colors duration-150 text-slate-500 bg-transparent border-none cursor-pointer"
-                        onClick={handleCreateConversation}
+                        onClick={() => dispatch(setSelectedConversation(null))}
                     >
                         <PenSquare size={14} />
                     </button>
@@ -147,7 +149,7 @@ function SideBar() {
                             className="w-full flex items-center justify-center gap-2 text-sm font-medium test-white bg-linear-to-br
                    from-indigo-400 to-violet-600 rounded-xl py-[10px] border-none cursor-pointer hover:opacity-80 transition-opacity
                     duration-150 "
-                            onClick={handleCreateConversation}
+                            onClick={() => dispatch(setSelectedConversation(null))}
                         >
                             <Plus size={15} />
                             New chat
