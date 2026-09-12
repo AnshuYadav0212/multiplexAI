@@ -1,6 +1,7 @@
 import redis from "../../../shared/redis/redis.js";
 import dotenv from "dotenv";
 import { getMessages } from "../utils/getMessages.js";
+dotenv.config();
 export const getMemory = async (conversationId) => {
   const key = `conversation-${conversationId}`;
   const cache = await redis.get(key);
@@ -22,7 +23,7 @@ export const addMessage = async (conversationId, role, content) => {
     content,
   });
 
-  if (messages.length > 20) {
+  if (messages.length > process.env.REDIS_CONTEXT_MEMORY_LENGTH) {
     messages.shift();
   }
   await redis.set(key, JSON.stringify(messages));

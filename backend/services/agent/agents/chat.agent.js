@@ -1,10 +1,15 @@
+import {
+  AIMessage,
+  HumanMessage,
+  SystemMessage,
+} from "@langchain/core/messages";
 import { getModel } from "../config/llmModels.js";
 import { getMemory } from "../config/memory.js";
 
 export const chatAgent = async (state) => {
   const llm = await getModel("chat");
   const history = await getMemory(state.conversationId);
-  const messages = [];
+
   const systemPrompt = `
 
 You are the AI assistant for MultiplexAI, a multi-agent AI application.
@@ -61,16 +66,19 @@ Follow these formatting rules:
 
 Return ONLY the final assistant response in Markdown.
 `;
-  const response = await llm.invoke([
-    {
-      role: "system",
-      content: systemPrompt,
-    },
-    {
-      role: "human",
-      content: state.prompt,
-    },
-  ]);
+
+  const messages = [new SystemMessage(systemPrompt)];
+  history.forEach((msg) => {
+    if (msg.role == "user") {
+      messages.push(new HumanMessage(msg.content));
+    } else if (msg.role == "assistant") {
+      messages.push(new AIMessage(msg.content));
+    }
+  });
+
+  messages.push(new HumanMessage(state.prompt));
+
+  const response = await llm.invoke(messages);
   return {
     ...state,
     aiResponse: response.content,

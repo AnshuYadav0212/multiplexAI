@@ -6,7 +6,7 @@ import { ChatGroq } from "@langchain/groq";
 export const agent = async (req, res) => {
   try {
     const { conversationId, prompt } = req.body;
-    await addMessage(conversationId, "user", prompt);
+
     await axios.post(
       `${process.env.CHAT_SERVICE_URL}/message/${conversationId}`,
       {
@@ -20,8 +20,9 @@ export const agent = async (req, res) => {
       conversationId,
     });
     const response = result.aiResponse;
+    await addMessage(conversationId, "user", prompt);
 
-    await addMessage(conversationId, "user", response);
+    await addMessage(conversationId, "assistant", response);
 
     await axios.post(
       `${process.env.CHAT_SERVICE_URL}/message/${conversationId}`,
