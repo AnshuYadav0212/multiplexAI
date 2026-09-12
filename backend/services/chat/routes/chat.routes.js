@@ -12,6 +12,6 @@ router.post("/conversation", createConversation);
 router.get("/conversations", getConversations);
 router.post("/conversation/:conversationId", updateConversation);
 router.post("/message/:conversationId", saveMessage);
-router.get("/get-messages/:conversationId", getMessages);
+router.get("/messages/:conversationId", getMessages);
 
 export default router;

@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import protect from "./middleware/auth.middleware.js";
 import { getCurrentUser } from "./controllers/user.controller.js";
 import { proxyWithHeader } from "./utils/proxyWithHeader.js";
+import morgan from "morgan";
 dotenv.config();
 
 const port = process.env.API_GATEWAY_PORT;
@@ -18,11 +19,12 @@ app.use(
     credentials: true,
   }),
 );
+app.use(morgan("dev"));
 
 app.use(cookieParser());
 app.use("/api/auth", proxy(process.env.AUTHENTICATION_SERVICE_URL));
 app.use("/api/chat", protect, proxyWithHeader(process.env.CHAT_SERVICE_URL));
-app.use("/api/chat", protect, proxy(process.env.AGENT_SERVICE_URL));
+app.use("/api/agent", protect, proxy(process.env.AGENT_SERVICE_URL));
 
 app.get("/api/self", protect, getCurrentUser);
 app.get("/", (req, res) => {

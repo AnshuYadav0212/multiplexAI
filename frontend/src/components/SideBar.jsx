@@ -73,7 +73,7 @@ function SideBar() {
                     <Plus size={18} />
                 </button>
 
-                <div className="flex-1 overflow-y-auto px-2 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pt-18">
+                <div className="flex-1 overflow-y-auto px-2 pb-2 scrollbar-width [&::-webkit-scrollbar]:hidden pt-18">
                     {conversations.map((conver, i) => {
                         const isActiveConver = selectedConversation?._id == conver?._id;
                         return (
