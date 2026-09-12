@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { ChatGroq } from "@langchain/groq";
 export const agent = async (req, res) => {
   try {
-    const { conversationId, prompt } = req.body;
+    const { conversationId, prompt, agent } = req.body;
 
     await axios.post(
       `${process.env.CHAT_SERVICE_URL}/message/${conversationId}`,
@@ -18,6 +18,7 @@ export const agent = async (req, res) => {
     const result = await graph.invoke({
       prompt: prompt.trim(),
       conversationId,
+      agent,
     });
     const response = result.aiResponse;
     await addMessage(conversationId, "user", prompt);
@@ -30,10 +31,14 @@ export const agent = async (req, res) => {
         conversationId,
         role: "assistant",
         content: response,
+        images: result.images,
       },
     );
 
-    return res.status(200).json(response);
+    return res.status(200).json({
+      answer: response,
+      images: result.images,
+    });
   } catch (error) {
     console.error("Agent error:", error);
     console.error("Downstream error:", error.response?.data);

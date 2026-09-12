@@ -29,7 +29,7 @@ function ChatInput() {
 
         }
         const payload = {
-            prompt: value.trim(), conversationId: convers?._id
+            prompt: value.trim(), conversationId: convers?._id, agent: selectedAgent.toLowerCase()
         }
 
         dispatch(addMessage({ role: "user", content: value.trim() }))
@@ -56,9 +56,12 @@ function ChatInput() {
                         const isActive = selectedAgent == agent.label
                         const Icon = agent.icon
                         return (
-                            <div className={`
+                            <div
+                                onClick={() => setSelectedAgent(agent.label)}
+                                className={`
                                 
                                 shrink-0
+                                
                                 inline-flex
                                 items-center
                                 gap-2 cursor-pointer mb-0.5 
@@ -71,7 +74,7 @@ function ChatInput() {
                                 transition-all
                                 
                                     ${isActive ? "bg-linear-to-r from-indigo-500 to-violet-600 text-white border-indigo-500/18 shadow-[0_1px_8px_rgba(99,100,200,0.5)"
-                                    : "text-slate-400 bg-white/3 border-white/6 hover:bg-white/7"}`}
+                                        : "text-slate-400 bg-white/3 border-white/6 hover:bg-white/7"}`}
                             >
 
                                 <Icon size={15}

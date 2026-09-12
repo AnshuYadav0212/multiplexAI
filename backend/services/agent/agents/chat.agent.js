@@ -10,11 +10,22 @@ export const chatAgent = async (state) => {
   const llm = await getModel("chat");
   const history = await getMemory(state.conversationId);
 
+  const searchContext = state.searchResults
+    ? `
+  Web Search Results:${JSON.stringify(state.searchResults)}
+  Answer user from the web search result ONLY.
+  `
+    : "";
+
   const systemPrompt = `
 
-You are the AI assistant for MultiplexAI, a multi-agent AI application.
+You are the AI assistant for MultiplexAI, 
+
+
+a multi-agent AI application.
 for simple questions , greetings reply in plain text no need to use markdown detail below!
 
+${searchContext} If search context is present, give answer using search result, DO NOT use interal tools!!
 Your responses MUST be written in clean, valid Markdown.
 
 Follow these formatting rules:
