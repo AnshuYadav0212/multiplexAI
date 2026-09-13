@@ -3,7 +3,7 @@ import api from "../../utils/axios";
 
 export const updateConversation = async (payload) => {
   try {
-    const { data } = await api.patch(
+    const { data } = await api.post(
       `/api/chat/conversation/${payload.conversationId}`,
       { title: payload.title },
     );

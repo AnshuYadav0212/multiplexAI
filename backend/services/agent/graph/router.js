@@ -26,7 +26,6 @@ export const router = async (state) => {
    learning,
    questions.
 
-   
    Code:
    Gererate code,
    Debug code,
@@ -42,7 +41,6 @@ export const router = async (state) => {
    PPT:
    questions about generate PPT or document of the context.
 
-      
    Search:
    Current events,
    Recent innovations and developments,
@@ -64,9 +62,7 @@ export const router = async (state) => {
    User Query:
    ${state.prompt}
   `;
-
   const response = await llm.invoke(systemPrompt);
-
   return {
     ...state,
     agent: response.content.trim().toLowerCase(),

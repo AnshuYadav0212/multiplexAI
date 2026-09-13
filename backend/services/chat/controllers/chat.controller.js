@@ -55,19 +55,16 @@ export const updateConversation = async (req, res) => {
 export const saveMessage = async (req, res) => {
   try {
     const { conversationId } = req.params;
-    const { role, content , images} = req.body;
-    if (role && content != null && conversationId) {
-      const message = await Message.create({
-        conversationId,
-        content,
-        role,
-        images
-      });
-      return res.status(200).json(message);
-    } else
-      return res
-        .status(400)
-        .json({ message: "conversationId, role and content are required" });
+    const { role, content, images, artifacts } = req.body;
+
+    const message = await Message.create({
+      conversationId,
+      content,
+      role,
+      images,
+      artifacts,
+    });
+    return res.status(200).json(message);
   } catch (error) {
     return res
       .status(500)

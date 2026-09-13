@@ -18,9 +18,7 @@ export const chatAgent = async (state) => {
     : "";
 
   const systemPrompt = `
-
 You are the AI assistant for MultiplexAI, 
-
 
 a multi-agent AI application.
 for simple questions , greetings reply in plain text no need to use markdown detail below!
@@ -43,7 +41,6 @@ Follow these formatting rules:
    - Item one
    - Item two
    - Item three
-
 
 6. Use inline code with backticks for:
    - variable names

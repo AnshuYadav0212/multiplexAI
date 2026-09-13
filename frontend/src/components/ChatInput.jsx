@@ -68,7 +68,9 @@ function ChatInput() {
                 addMessage({
                     role: "assistant",
                     content: data?.answer,
-                    images: data?.images || []
+                    images: data?.images || [],
+                    artifacts: data?.artifacts || []
+
                 })
             );
 
