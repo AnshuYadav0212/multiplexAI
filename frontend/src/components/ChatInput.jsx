@@ -15,29 +15,70 @@ function ChatInput() {
     const { messages } = useSelector(state => state.message)
     const dispatch = useDispatch()
     const handleSendMessage = async () => {
-        console.log("Selected conversation:", selectedConversation);
-        let convers = selectedConversation
-        if (!convers) {
-            const conversation = await createConversation()
-            dispatch(setSelectedConversation(conversation))
-            dispatch(addConversation(conversation))
-            convers = conversation
-        }
-        if (convers.title == "New Chat") {
-            await updateConversation({ conversationId: convers?._id, title: value.trim() })
-            dispatch(setConversationTitle({ conversationId: convers?._id, title: value.trim() }))
+        try {
+            const prompt = value.trim();
 
-        }
-        const payload = {
-            prompt: value.trim(), conversationId: convers?._id, agent: selectedAgent.toLowerCase()
-        }
+            if (!prompt) return;
 
-        dispatch(addMessage({ role: "user", content: value.trim() }))
-        setValue("")
-        const data = await sendMessage(payload)
-        dispatch(addMessage({ role: "assistant", content: data }))
-        console.log(data)
-    }
+            console.log("Selected conversation:", selectedConversation);
+
+            let convers = selectedConversation;
+
+            if (!convers) {
+                const conversation = await createConversation();
+
+                dispatch(setSelectedConversation(conversation));
+                dispatch(addConversation(conversation));
+
+                convers = conversation;
+            }
+
+            if (convers.title === "New Chat") {
+                await updateConversation({
+                    conversationId: convers._id,
+                    title: prompt
+                });
+
+                dispatch(
+                    setConversationTitle({
+                        conversationId: convers._id,
+                        title: prompt
+                    })
+                );
+            }
+
+            const payload = {
+                prompt,
+                conversationId: convers._id,
+                agent: selectedAgent.toLowerCase()
+            };
+
+            dispatch(
+                addMessage({
+                    role: "user",
+                    content: prompt
+                })
+            );
+
+            setValue("");
+
+            const data = await sendMessage(payload);
+
+            dispatch(
+                addMessage({
+                    role: "assistant",
+                    content: data?.answer,
+                    images: data?.images || []
+                })
+            );
+
+        } catch (error) {
+            console.error(
+                "Failed to send message:",
+                error.response?.data || error.message
+            );
+        }
+    };
     const agents = [
         { id: "auto", icon: Zap, label: "Auto" },
         { id: "chat", icon: MessageSquare, label: "chat" },

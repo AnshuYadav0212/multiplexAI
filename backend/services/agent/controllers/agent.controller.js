@@ -3,6 +3,7 @@ import { graph } from "../graph/graph.js";
 import { addMessage } from "../config/memory.js";
 import dotenv from "dotenv";
 import { ChatGroq } from "@langchain/groq";
+dotenv.config();
 export const agent = async (req, res) => {
   try {
     const { conversationId, prompt, agent } = req.body;

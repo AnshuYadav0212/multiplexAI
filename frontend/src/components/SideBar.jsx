@@ -175,7 +175,7 @@ function SideBar() {
                                     ${isActiveConver ? "bg-indigo-500/10 border-indigo-500/18" : "bg-transparent border-transparent"}`}
                                     >
                                         <div
-                                            className={`flex item-center justify-center shrink-0 w-[18px] rounded-lg transition-colors duration-150
+                                            className={`flex item-center justify-center shrink-0 w-4.5 rounded-lg transition-colors duration-150
                                     ${isActiveConver ? "bg-indigo-400/10 text-indigo-400" : "bg-transparent text-slate-500"}
                                     `}
                                         >

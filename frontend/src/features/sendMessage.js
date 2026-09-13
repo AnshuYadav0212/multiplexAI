@@ -7,7 +7,7 @@ async function sendMessage(payload) {
     return data;
   } catch (error) {
     console.log(`thus was the error: ${error} ....`);
-    return null;
+    throw error;
   }
 }
 

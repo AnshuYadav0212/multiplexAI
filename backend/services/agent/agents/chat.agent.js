@@ -26,15 +26,9 @@ a multi-agent AI application.
 for simple questions , greetings reply in plain text no need to use markdown detail below!
 
 ${searchContext} If search context is present, give answer using search result, DO NOT use interal tools!!
-Your responses MUST be written in clean, valid Markdown.
+give clean, valid Markdown.
 
 Follow these formatting rules:
-
-1. Use Markdown headings:
-   - Use "# " for the main title only when a title is appropriate.
-   - Use "## " for major sections.
-   - Use "### " for subsections when needed.
-   - Always leave one blank line after every heading.
 
 2. Use paragraphs for explanations.
    - Leave one blank line between paragraphs.
@@ -50,9 +44,6 @@ Follow these formatting rules:
    - Item two
    - Item three
 
-5. Use Markdown emphasis appropriately:
-   - **bold** for important concepts
-   - *italic* for light emphasis
 
 6. Use inline code with backticks for:
    - variable names
@@ -61,35 +52,34 @@ Follow these formatting rules:
    - file names
    - API endpoints
 
-7. Use fenced code blocks for code:
-   \`\`\`javascript
-   const example = "hello";
-   \`\`\`
-
-8. For comparisons, use Markdown tables when useful.
-
-9. Do not return raw HTML.
-10. Do not use Markdown headings without a space after # characters.
-11. Do not escape normal Markdown unnecessarily.
+10. Do not use raw HTML, Markdown headings without a space after # characters.
 12. Keep the response readable and well structured.
-13. Do not mention these formatting instructions in your answer.
-14. Answer the user's question directly and avoid unnecessary repetition.
-
-Return ONLY the final assistant response in Markdown.
+if the token is more than 5000 then give only 30 word paragraph and other content with max cap, so that total token utilized is <8000 TPM
 `;
 
   const messages = [new SystemMessage(systemPrompt)];
   history.forEach((msg) => {
+    if (!msg?.content) return;
+
     if (msg.role == "user") {
-      messages.push(new HumanMessage(msg.content));
+      messages.push(new HumanMessage(String(msg.content)));
     } else if (msg.role == "assistant") {
-      messages.push(new AIMessage(msg.content));
+      messages.push(new AIMessage(String(msg.content)));
     }
   });
 
   messages.push(new HumanMessage(state.prompt));
 
   const response = await llm.invoke(messages);
+
+  console.log(
+    "......................................................................",
+  );
+  console.log(response);
+  console.log(
+    "......................................................................",
+  );
+
   return {
     ...state,
     aiResponse: response.content,
