@@ -8,6 +8,7 @@ export const visualAgent = async (state) => {
     const llm = await getModel("visual");
     const res = await llm.invoke(`
         you are an elite prompt engineer.
+        
         Covert the users request into a highly detailed image generation prompt
         Requirements:
         - Cinematic lighting
@@ -35,7 +36,7 @@ export const visualAgent = async (state) => {
     const fileName = `image-${Date.now()}.png`;
     await uploadToS3(fileName, buffer, "image/png");
 
-    const downloadUrl = await getFromS3(fileName, 60 * 60 * 24);
+    const downloadUrl = await getFromS3(fileName, 60 * 24);
     console.log(downloadUrl);
 
     return {
