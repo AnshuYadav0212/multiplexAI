@@ -28,6 +28,9 @@ export const getModel = async (agent) => {
     case "search":
       return groq;
 
+    case "visual":
+      return groq;
+
     default:
       return groq;
   }

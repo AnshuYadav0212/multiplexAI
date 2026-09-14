@@ -3,7 +3,7 @@ import { agentState } from "./state.js";
 import { router } from "./router.js";
 import { chatAgent } from "../agents/chat.agent.js";
 import { codeAgent } from "../agents/code.agent.js";
-import { visualAgent } from "../agents/visual.js";
+import { visualAgent } from "../agents/visual.agent.js";
 import { pdfAgent } from "../agents/pdf.agent.js";
 import { pptAgent } from "../agents/ppt.agent.js";
 import { searchAgent } from "../agents/search.agent.js";

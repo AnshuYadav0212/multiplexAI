@@ -64,6 +64,10 @@ function ChatInput() {
 
             const data = await sendMessage(payload);
 
+            console.log("API DATA:", data);
+            console.log("ANSWER:", data?.answer);
+            console.log("IMAGES:", data?.images);
+
             dispatch(setArtifacts(data.artifacts || []))
 
             dispatch(

@@ -7,17 +7,18 @@ import { getModel } from "../config/llmModels.js";
 import { getMemory } from "../config/memory.js";
 
 export const chatAgent = async (state) => {
-  const llm = await getModel("chat");
-  const history = await getMemory(state.conversationId);
+  try {
+    const llm = await getModel("chat");
+    const history = await getMemory(state.conversationId);
 
-  const searchContext = state.searchResults
-    ? `
+    const searchContext = state.searchResults
+      ? `
   Web Search Results:${JSON.stringify(state.searchResults)}
   Answer user from the web search result ONLY.
   `
-    : "";
+      : "";
 
-  const systemPrompt = `
+    const systemPrompt = `
 You are the AI assistant for MultiplexAI, 
 
 a multi-agent AI application.
@@ -54,31 +55,37 @@ Follow these formatting rules:
 if the token is more than 5000 then give only 30 word paragraph and other content with max cap, so that total token utilized is <8000 TPM
 `;
 
-  const messages = [new SystemMessage(systemPrompt)];
-  history.forEach((msg) => {
-    if (!msg?.content) return;
+    const messages = [new SystemMessage(systemPrompt)];
+    history.forEach((msg) => {
+      if (!msg?.content) return;
 
-    if (msg.role == "user") {
-      messages.push(new HumanMessage(String(msg.content)));
-    } else if (msg.role == "assistant") {
-      messages.push(new AIMessage(String(msg.content)));
-    }
-  });
+      if (msg.role == "user") {
+        messages.push(new HumanMessage(String(msg.content)));
+      } else if (msg.role == "assistant") {
+        messages.push(new AIMessage(String(msg.content)));
+      }
+    });
 
-  messages.push(new HumanMessage(state.prompt));
+    messages.push(new HumanMessage(state.prompt));
 
-  const response = await llm.invoke(messages);
+    const response = await llm.invoke(messages);
 
-  console.log(
-    "......................................................................",
-  );
-  console.log(response);
-  console.log(
-    "......................................................................",
-  );
+    console.log(
+      "......................................................................",
+    );
+    console.log(response);
+    console.log(
+      "......................................................................",
+    );
 
-  return {
-    ...state,
-    aiResponse: response.content,
-  };
+    return {
+      ...state,
+      aiResponse: response.content,
+    };
+  } catch {
+    return {
+      ...state,
+      aiResponse: "Failed to generate response",
+    };
+  }
 };

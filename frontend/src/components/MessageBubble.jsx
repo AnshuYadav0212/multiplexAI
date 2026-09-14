@@ -8,12 +8,11 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import remarkGfm from 'remark-gfm'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-
-
 function MessageBubble({ role, content, images }) {
     const isUser = role == "user"
     const [lightBox, setLightBox] = useState(null)
     const [copiedCode, setCopiedCode] = useState("")
+
 
     const copyCode = async (code) => {
         await navigator.clipboard.writeText(code)
@@ -23,12 +22,7 @@ function MessageBubble({ role, content, images }) {
         }, 2000)
     }
 
-    const formattedContent = content?.replace(
-        /`(https?:\/\/[^\s`]+)`/g,
-        '[$1]($1)'
-    );
-
-
+    const formattedContent = content || ""
     return (
         <div className={`flex mb-3 ${isUser ? "justify-end" : "justify-start"}`}>
             <div className={` px-4 py-2.5 rounded-2xl overflow-hidden wrap-break-words leading-relaxed 
@@ -97,6 +91,7 @@ function MessageBubble({ role, content, images }) {
                                 <ExternalLink size={15} />
                             </a>
                         ),
+
                         code: ({ className, children }) => {
                             const value = String(children).trim();
                             if (!className) {

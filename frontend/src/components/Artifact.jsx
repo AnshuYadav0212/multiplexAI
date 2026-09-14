@@ -1,4 +1,4 @@
-import { Code2, Copy, PanelRightClose, Rotate3D, Eye } from 'lucide-react'
+import { Code2, Copy, PanelRightClose, Rotate3D, Eye, Check } from 'lucide-react'
 import React from 'react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
@@ -10,17 +10,10 @@ function Artifact() {
   const [collapse, setCollapse] = useState(false)
   const [tab, setTab] = useState("code")
   const [activeFile, setActiveFile] = useState(0)
-  cosnt[copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   if (artifacts.length == 0) return;
-  const handleCopy = async (code) => {
-    await navigator.clipboard.writeText(code)
-    setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 2000)
 
-  }
 
   const file = artifacts?.[0].files[activeFile]
   const htmlFile = artifacts?.[0]?.files?.find(f => f.name === "index.html")
@@ -48,6 +41,14 @@ function Artifact() {
 </body>
 </html>
   `
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(file?.content || "")
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
+  }
 
   const detectLanguage = (fileName = "") => {
     const name = fileName.toLowerCase()
@@ -96,8 +97,9 @@ function Artifact() {
                flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 
            hover:text-slate-200 hover:bg-white/5 transition-colors duration-150 bg-transparent
            border-none cursor-pointer shrink-0
-               '>
-                <Copy size={15} />
+               ' onClick={handleCopy}>
+
+                {copied ? <Check size={14} /> : <Copy size={14} />}
               </button>
 
             </div>
@@ -105,7 +107,7 @@ function Artifact() {
               <div className='flex items-center gap-1 bg-white/4 border border-white/6 p-1 rounded-lg'>
                 <button onClick={() => setTab("code")} className={`flex items-center gap-2 px-2.5 py-1 text-[11px] font-medium rounded-md transition-colors duration-150 
               ${tab === "code" ? "bg-indigo-500 text-white" : " text-slate-400 hover:text-slate-200"}
-              `}>
+              `}  >
                   <Code2 size={14} /> Code
                 </button>
 
