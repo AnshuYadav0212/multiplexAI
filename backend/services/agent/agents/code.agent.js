@@ -37,8 +37,7 @@ export const codeAgent = async (state) => {
    - Hover Effects
    - Beautiful spacing
    - Single page unless user ask for differnt.
-   Return ONLY valid JSON
-   Schema:
+   Return ONLY valid JSON Schema:
    {
      "files":[
         {
@@ -70,6 +69,7 @@ export const codeAgent = async (state) => {
           id: Date.now(),
           type: "Project",
           files: data.files || [],
+          title: state.prompt,
         },
       ],
     };

@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react'
 import sendMessage from '../features/sendMessage'
 import { useDispatch, useSelector } from 'react-redux'
-import { addMessage, setMessages } from '../redux/messageSlice'
+import { addMessage, setMessages, setArtifacts } from '../redux/messageSlice'
 import { createConversation } from '../features/createConversation'
 import { addConversation, setConversationTitle, setSelectedConversation } from '../redux/conversationSlice'
 import { updateConversation } from '../features/updateConversation'
@@ -64,13 +64,14 @@ function ChatInput() {
 
             const data = await sendMessage(payload);
 
+            dispatch(setArtifacts(data.artifacts || []))
+
             dispatch(
                 addMessage({
                     role: "assistant",
                     content: data?.answer,
                     images: data?.images || [],
                     artifacts: data?.artifacts || []
-
                 })
             );
 
@@ -124,9 +125,7 @@ function ChatInput() {
                                     className={
                                         isActive ? "text-white" : "text-slate-400"
                                     }
-
                                 />
-
                                 {agent.label}
 
                             </div>

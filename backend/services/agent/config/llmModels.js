@@ -24,7 +24,7 @@ export const getModel = async (agent) => {
     case "chat":
       return groq;
     case "code":
-      return openrouter;
+      return groq;
     case "search":
       return groq;
 
