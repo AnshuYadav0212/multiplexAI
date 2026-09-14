@@ -21,58 +21,95 @@ export const codeAgent = async (state) => {
   if (intent == "CODE_GENERATION") {
     console.log(intent);
     const prompt = `
-   Generate the requested project.
-   Default stack:
-   - HTML
-   - CSS
-   - JavaScript
+  Generate the requested project.
 
-   USe React / Next.js / Vue ONLY if explicitly requested.
-   Rules:
-   - Responsive
-   - Modern UI
-   - CSS Variables
-   - Flexbox/Grid
-   - Smooth Scroll
-   - Hover Effects
-   - Beautiful spacing
-   - Single page unless user ask for differnt.
-   Return ONLY valid JSON Schema:
-   {
-     "files":[
-        {
-          "name": "index.html",
-          "content": "  "
-        },
-          {
-          "name": "style.css",
-          "content": "  "
-        },
-          {
-          "name": "script.js",
-          "content": "  "
-        }
-     ]
-   }
-    Rules for output:
-    - output must be start and end with {, } respectively.
-    - No markdown, explanation, extra text, \ \ \, and  intents.
-    User request:  ${state.prompt}
-   `;
+  Default stack:
+  - HTML
+  - CSS
+  - JavaScript
+
+  Use React / Next.js / Vue ONLY if explicitly requested.
+
+  Rules:
+  - Responsive
+  - Modern UI
+  - CSS Variables
+  - Flexbox/Grid
+  - Smooth Scroll
+  - Hover Effects
+  - Beautiful spacing
+  - Single page unless user asks for different.
+  - Keep the implementation concise.
+
+  ==================IMAGES=====================
+  - Use real Unsplash image URLs only when images are needed.
+
+  ==============================================
+OUTPUT LIMIT:
+- Keep the entire response under approximately 3000 tokens.
+- Keep HTML, CSS and JavaScript concise.
+- Avoid comments.
+- Avoid repeated styles.
+- Avoid unnecessary sections.
+- Use at most 3 images.
+- Do not generate large dummy datasets.
+
+- The JSON must always be complete and syntactically valid.
+
+  Return ONLY compact, valid JSON. No markdown fences.
+  Schema:
+  {
+    "files": [
+      {
+        "name": "index.html",
+        "content": ""
+      },
+      {
+        "name": "style.css",
+        "content": ""
+      },
+      {
+        "name": "script.js",
+        "content": ""
+      }
+    ]
+  }
+
+  IMPORTANT:
+  - The response must be complete.
+  - Never stop in the middle of a file.
+  - Escape all double quotes inside source-code strings.
+  - Escape backslashes correctly inside JSON strings.
+  - Use \\n for new lines inside JSON strings.
+  - Do not return markdown fences.
+  - Do not return explanations.
+  - End with the final }.
+
+  User request:
+  ${state.prompt}
+`;
     const res = await llm.invoke(prompt);
-    const data = JSON.parse(res.content);
-    return {
-      ...state,
-      aiResponse: "Code generated Successfully.",
-      artifacts: [
-        {
-          id: Date.now(),
-          type: "Project",
-          files: data.files || [],
-          title: state.prompt,
-        },
-      ],
-    };
+    console.log(res.content);
+
+    try {
+      const data = JSON.parse(res.content);
+
+      return {
+        ...state,
+        aiResponse: "Code generated successfully.",
+        artifacts: [
+          {
+            id: Date.now(),
+            type: "Project",
+            title: state.prompt,
+            files: data.files || [],
+          },
+        ],
+      };
+    } catch (error) {
+      console.error("Invalid/incomplete code JSON:", error.message);
+      throw new Error("Code generation was incomplete. Please try again.");
+    }
   }
 
   const res = await llm.invoke(`

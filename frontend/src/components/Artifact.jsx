@@ -10,10 +10,19 @@ function Artifact() {
   const [collapse, setCollapse] = useState(false)
   const [tab, setTab] = useState("code")
   const [activeFile, setActiveFile] = useState(0)
+  cosnt[copied, setCopied] = useState(false)
 
   if (artifacts.length == 0) return;
+  const handleCopy = async (code) => {
+    await navigator.clipboard.writeText(code)
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
 
-  const file = artifacts?.[0].files[activeFile]?.content
+  }
+
+  const file = artifacts?.[0].files[activeFile]
   const htmlFile = artifacts?.[0]?.files?.find(f => f.name === "index.html")
   const cssFile = artifacts?.[0]?.files?.find(f => f.name === "style.css")
   const jsFile = artifacts?.[0]?.files?.find(f => f.name === "script.js")
@@ -39,6 +48,19 @@ function Artifact() {
 </body>
 </html>
   `
+
+  const detectLanguage = (fileName = "") => {
+    const name = fileName.toLowerCase()
+    if (name.endsWith(".cpp")) return "cpp";
+    if (name.endsWith(".html")) return "html";
+    if (name.endsWith(".css")) return "css";
+    if (name.endsWith(".c")) return "c";
+    if (name.endsWith(".js") || name.endsWith(".jsx")) return "javascript";
+    if (name.endsWith(".json")) return "josn";
+    if (name.endsWith(".py")) return "python";
+    if (name.endsWith(".java")) return "typescript";
+    return "plaintext"
+  }
   console.log(file)
   return (
     <motion.div
@@ -125,8 +147,12 @@ function Artifact() {
                 className='w-full h-full'
               >
                 <Editor theme='vs-dark'
-                  language={file?.name}
-                  value={file}
+                  language={detectLanguage(file?.name)}
+                  value={file?.content}
+                  options={{
+                    readOnly: true, minimap: { enabled: false }, fontSize: 13, wordWrap: "on", automaticLayout: true, scrollBeyondLastLine: false, padding: { top: 16 }, lineNumbers: "on",
+                    renderLineHighlight: "none"
+                  }}
                 />
                 <iframe title='preview' srcDoc={previewDoc} sandbox='allow-scripts' className='w-full h-full bg-white' />
 
