@@ -24,6 +24,8 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use("/api/auth", proxy(process.env.AUTHENTICATION_SERVICE_URL));
 app.use("/api/chat", protect, proxyWithHeader(process.env.CHAT_SERVICE_URL));
+
+app.use("/api/bill", protect, proxyWithHeader(process.env.BILL_SERVICE_URL));
 app.use("/api/agent", protect, proxy(process.env.AGENT_SERVICE_URL));
 
 app.get("/api/self", protect, getCurrentUser);
