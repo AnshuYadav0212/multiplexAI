@@ -23,6 +23,7 @@ import logOut from "../features/logout.js";
 import { setUserData } from "../redux/userSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "../../utils/firebase.js";
+import BillDrawer from "./BillDrawer.jsx";
 
 function SideBar() {
     const [collapse, setCollapse] = useState(false);
@@ -32,6 +33,7 @@ function SideBar() {
     const { conversation, selectedConversation } = useSelector(
         (state) => state.conversation,
     );
+    const [showBill, setShowBill] = useState(false)
     const { userData } = useSelector((state) => state.user);
 
     const { conversations } = useSelector((state) => state.conversation);
@@ -221,12 +223,14 @@ function SideBar() {
                             </div>
                             <div className="flex gap-1">
                                 <button className=" flex items-center justify-center w-7 h-7 rounded-[7px] hover:text-slate-400 hover:bg-white/8 
-            transition-all duration-150 bg-transparent border-none text-yellow-500 cursor-pointer">
+                                transition-all duration-150 bg-transparent border-none text-yellow-500 cursor-pointer"
+                                    onClick={() => setShowBill(true)}
+                                >
 
                                     <Coins size={17} />
                                 </button>
                                 <button className=" flex items-center justify-center w-7 h-7 rounded-[7px] hover:text-slate-400 hover:bg-white/8 
-            transition-all duration-150 bg-transparent border-none text-yellow-500 cursor-pointer"
+                                        transition-all duration-150 bg-transparent border-none text-yellow-500 cursor-pointer"
                                     onClick={handleLogout}>
                                     <LogOut size={17} />
                                 </button>
@@ -239,6 +243,11 @@ function SideBar() {
                     )}
                 </div>
             </div>
+            <BillDrawer open={showBill}
+                onClose={() => setShowBill(false)}
+
+            />
+
         </div>
     );
 
