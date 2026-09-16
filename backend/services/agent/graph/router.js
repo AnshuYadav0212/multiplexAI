@@ -7,6 +7,18 @@ export const router = async (state) => {
       agent: state.agent,
     };
   }
+  if (state.file.mimetype === "application/pdf") {
+    return {
+      ...state,
+      agent: "pdfRag",
+    };
+  }
+  if (state.file.mimetype.startsWith === "application/pdf") {
+    return {
+      ...state,
+      agent: "imageAnalyzer",
+    };
+  }
 
   const llm = await getModel("router");
   const systemPrompt = `

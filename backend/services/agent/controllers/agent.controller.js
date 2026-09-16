@@ -7,6 +7,7 @@ dotenv.config();
 export const agent = async (req, res) => {
   try {
     const { prompt, conversationId, agent } = req.body;
+    const file=req.file
     const userId = req.headers["x-user-id"];
 
     await axios.post(
@@ -23,6 +24,7 @@ export const agent = async (req, res) => {
       conversationId,
       agent,
       userId,
+      file
     });
 
     const response = result?.aiResponse;
