@@ -1,4 +1,5 @@
 import { getModel } from "../config/llmModels.js";
+import { deductCredits } from "../utils/deductCredits.js";
 
 export const codeAgent = async (state) => {
   const llm = await getModel("code");
@@ -93,6 +94,7 @@ OUTPUT LIMIT:
 
     try {
       const data = JSON.parse(res.content);
+      await deductCredits(state.userId, "code");
 
       return {
         ...state,
@@ -120,6 +122,8 @@ OUTPUT LIMIT:
        ${state.prompt}
     `);
   const data = res.content;
+  await deductCredits(state.userId, "code");
+
   return {
     ...state,
     aiResponse: data,

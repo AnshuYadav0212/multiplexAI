@@ -2,6 +2,7 @@ import { getModel } from "../config/llmModels.js";
 import { generatePdf } from "../utils/generatePdf.js";
 import { getFromS3 } from "../utils/getFromS3.js";
 import { uploadToS3 } from "../utils/uploadToS3.js";
+import { deductCredits } from "../utils/deductCredits.js";
 
 export const pdfAgent = async (state) => {
   try {
@@ -14,7 +15,6 @@ export const pdfAgent = async (state) => {
     - Provide ACTUAL facts, history, background, achievements, and details about the topic.
     - DO NOT write guides, meta-instructions, or steps on how to create a document/PDF.
     - Return ONLY a raw valid JSON object (no markdown code blocks, no extra text).
-
 
     Return ONLY valid JSON matching this exact structure:
     {
@@ -38,6 +38,8 @@ export const pdfAgent = async (state) => {
       .replace(/```/g, "")
       .trim();
     const data = JSON.parse(rawContent);
+    await deductCredits(state.userId, "pdf");
+
     const pdfBuffer = await generatePdf(data);
     const fileName = `pdf-${Date.now()}.pdf`;
     await uploadToS3(fileName, pdfBuffer, "application/pdf");

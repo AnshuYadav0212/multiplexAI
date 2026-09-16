@@ -5,6 +5,7 @@ import {
 } from "@langchain/core/messages";
 import { getModel } from "../config/llmModels.js";
 import { getMemory } from "../config/memory.js";
+import { deductCredits } from "../utils/deductCredits.js";
 
 export const chatAgent = async (state) => {
   try {
@@ -69,6 +70,7 @@ if the token is more than 5000 then give only 30 word paragraph and other conten
     messages.push(new HumanMessage(state.prompt));
 
     const response = await llm.invoke(messages);
+    await deductCredits(state.userId, "chat");
 
     console.log(
       "......................................................................",

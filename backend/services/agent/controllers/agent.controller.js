@@ -6,7 +6,8 @@ import { ChatGroq } from "@langchain/groq";
 dotenv.config();
 export const agent = async (req, res) => {
   try {
-    const { conversationId, prompt, agent } = req.body;
+    const { prompt, conversationId, agent } = req.body;
+    const userId = req.headers["x-user-id"];
 
     await axios.post(
       `${process.env.CHAT_SERVICE_URL}/message/${conversationId}`,
@@ -21,6 +22,7 @@ export const agent = async (req, res) => {
       prompt: prompt.trim(),
       conversationId,
       agent,
+      userId,
     });
 
     const response = result?.aiResponse;

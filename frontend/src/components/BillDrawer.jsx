@@ -21,6 +21,7 @@ function BillDrawer({ open, onClose }) {
           try {
             console.log(response)
             const data = await verifyPayment(response)
+            if (data) dispa
             console.log(data)
           } catch (error) {
             console.log(error)

@@ -1,12 +1,12 @@
 import { Code2, FileText, Globe, Icon, ImageIcon, MessageSquare, Mic, Paperclip, Presentation, Send, Zap } from 'lucide-react'
 import React from 'react'
 import { useState } from 'react'
-import sendMessage from '../features/sendMessage'
+import sendMessage from '../features/sendMessage.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMessage, setMessages, setArtifacts } from '../redux/messageSlice'
-import { createConversation } from '../features/createConversation'
-import { addConversation, setConversationTitle, setSelectedConversation } from '../redux/conversationSlice'
-import { updateConversation } from '../features/updateConversation'
+import { createConversation } from '../features/createConversation.js'
+import { addConversation, setConversationTitle, setSelectedConversation } from '../redux/conversationSlice.js'
+import { updateConversation } from '../features/updateConversation.js'
 
 function ChatInput() {
     const [value, setValue] = useState("")
@@ -105,6 +105,7 @@ function ChatInput() {
                         const Icon = agent.icon
                         return (
                             <div
+                                key={agent.id}
                                 onClick={() => setSelectedAgent(agent.label)}
                                 className={`
                                 
